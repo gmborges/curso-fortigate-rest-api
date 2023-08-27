@@ -1,0 +1,8 @@
+#Log file
+*.log
+
+# Cache
+__pycache__/
+
+# My .env file
+my.env
