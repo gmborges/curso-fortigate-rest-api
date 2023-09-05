@@ -13,12 +13,18 @@ def consulta_usuario(user):
     # Consulta a lista de usuários no firewall no formato JSON e armazena em uma variável do tipo dicionário
     usuarios = requests.get(f"https://{{ENDERECO_FGT}}/api/v2/cmdb/user/local?vdom=root&access_token={creds.api_key_FGT740}", verify=False).json()
 
+    # Variável para registrar a existência ou não do usuário consultado
+    hasUser = None
+    
     # Verifica se o usuario procurado existe na base de usuarios do FortiGate
     for usuario in usuarios["results"]:
         if usuario["name"] == user:
+            hasUser = True
             print(f"Usuario {user} existe na base")
-        else:
-            raise ValueError("Usuario inexistente")
+            break
+    
+    if not hasUser:
+        raise ValueError("Usuario inexistente")
 
 
 def consulta_grupo(user):
