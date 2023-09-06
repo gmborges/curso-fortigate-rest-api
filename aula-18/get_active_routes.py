@@ -1,7 +1,7 @@
 # From: Hawk
 # Curso: "Automatizando FortiGate com Python e REST API"
 # Aula: "Prática: Consultando rotas ativas na tabela de roteamento"
-# Escopo: Consultar rotas ativas na tabela de roteamento e realizar Policy Lookup.
+# Escopo: Consultar rotas ativas na tabela de roteamento e realizar Route Lookup.
 
 import requests
 import creds
@@ -29,9 +29,13 @@ def consulta_rotas_ativas():
     indice = 0
     for rota in rotas_ativas['results']:
         indice += 1
-        print(f"# {indice} --")
-        print(f"Rede: {rota['ip_mask']}\n Gateway: {rota['gateway']}\n Interface: {rota['interface']}\n Distância: {rota['distance']}\n Prioridade: {rota['priority']}\n")
-
+        print(f"\n# {indice} --")
+        print(f"Rede: {rota['ip_mask']}")
+        print(f"Gateway: {rota['gateway']}")
+        print(f"Interface: {rota['interface']}")
+        print(f"Distância: {rota['distance']}")
+        print(f"Prioridade: {rota['priority']}")
+        
 
 def route_lookup(destino):
     # Declaração de variáveis que compõem a URL
@@ -63,7 +67,7 @@ def main():
             "\n1) Listar rotas ativas na tabela de roteamento (FIB)"
             "\n2) Realizar um Route Lookup"
         )
-        opcao = input("\nEscolha a opção deseja: ")
+        opcao = input("\nEscolha a opção desejada: ")
 
         if opcao == "1":
             consulta_rotas_ativas()
