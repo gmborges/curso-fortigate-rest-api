@@ -1,6 +1,6 @@
 # From: Hawk
 # Curso: "Automatizando FortiGate com Python e REST API"
-# Aula: "Prática: Criar objetos 'Address' e 'Address Group'"
+# Aula: "Prática: Criar objetos 'Address'
 # Escopo: Informa a quantidade de "Address' a ser criado e seus dados para criá-los.
 
 import requests
@@ -57,7 +57,7 @@ def create_address(payload):
     if response.status_code == 200:
         print("Address criado com sucesso!")
     else:
-        print("Erro ao criar NAT: " + response.text)
+        print("Erro ao criar Address: " + response.text)
 
 
 def main():
