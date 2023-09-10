@@ -1,7 +1,7 @@
 # From: Hawk
 # Curso: "Automatizando FortiGate com Python e REST API"
-# Aula: "Prática: Criar objetos 'Virtual IP' e 'VIP Group'"
-# Escopo: A partir de um arquivo CSV, criar objetos VIP e VIP Group.
+# Aula: "Prática: Criar objetos 'Virtual IP'"
+# Escopo: A partir de um arquivo CSV, criar objetos VIP.
 
 import requests
 import json
