@@ -10,6 +10,7 @@ requests.urllib3.disable_warnings()
 
 load_dotenv()
 
+
 def parse_arguments():
 
     parser = argparse.ArgumentParser(description='Criar objeto "Address" com classificação automática de IP por reputação')
@@ -19,6 +20,7 @@ def parse_arguments():
 
     args = parser.parse_args()
     return args
+
 
 def get_device_param(device):
 
@@ -32,6 +34,7 @@ def get_device_param(device):
 
     return device_param
 
+
 def define_payload(filename):
     with open(filename, "r", encoding="utf-8") as file:
         reader = DictReader(file, delimiter=';')
@@ -43,6 +46,7 @@ def create_address(device_param, payload):
     url_api = f"https://{device_param['url']}/api/v2/cmdb/firewall/address/?vdom=root&access_token={device_param['api_key']}"
 
     threat_list = list()
+    secure_list = list()
 
     # Percorre cada linha do payload, que corresponde a cada objeto Address
     for address in payload:
@@ -58,6 +62,12 @@ def create_address(device_param, payload):
             print(f"Endereço identificado como ameaça. Renomeado para: {address['name']}")
             threat_list.append({"name":address['name']})
 
+        # Se o endereço for considerado seguro, modifica o nome e adiciona em uma lista de endereços confiáveis
+        else:
+            address['name'] = f"HOST_{address['subnet']}"
+            print(f"Endereço identificado como seguro. Renomeado para: {address['name']}")
+            secure_list.append({"name":address['name']})
+
         # Transforma o dicionário "address" em string JSON para enviar como payload ao FortiGate
         payload = json.dumps(address)
 
@@ -72,6 +82,8 @@ def create_address(device_param, payload):
     
     # Adiciona a lista de ameaças no grupo "RISK_GROUP"
     address_join_group(device_param, threat_list, "RISK_GROUP")
+    # Adiciona a lista segura no grupo "SECURE_GROUP"
+    address_join_group(device_param, secure_list, "SECURE_GROUP")
 
 
 def valida_reputacao(ip):
@@ -100,7 +112,7 @@ def address_join_group(device_param, addresses, group_name):
 
     # Valida se houve erro ou sucesso na criação
     if response.status_code == 200:
-        print(f"\nAmeaças incluídas no grupo {group_name}!")
+        print(f"\nEndereços incluídos no grupo {group_name}!")
     else:
         print(f"\nErro ao incluir Addresses no grupo {group_name}: " + response.text)
 
